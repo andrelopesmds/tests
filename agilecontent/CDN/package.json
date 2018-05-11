@@ -1,0 +1,18 @@
+{
+  "name": "cdn",
+  "version": "1.0.0",
+  "main": "solution.js",
+  "dependencies": {
+    "csv-writer": "^1.0.0",
+    "mocha": "^5.0.5",
+    "request": "^2.85.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node solution.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
