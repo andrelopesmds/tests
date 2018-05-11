@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Dito</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+ 
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Node.js",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#languageId" ).autocomplete({
+      source: availableTags,
+      minLength: 2
+    });
+  } );
+  </script>
+
+
+</head>
+  <body>
+ <div>
+    <h1>Auto complete</h1>
+    <label for="name">Name:</label>
+    <input id="nameId" type="text" name="name"  placeholder="Insira seu nome" />
+    <br />
+    <label for="email">Email:</label>
+    <input id="emailId" type="email" name="email"  placeholder="Insira seu email" />
+    <br />
+    <div class="ui-widget">
+    <label for="languages">Linguagem preferida:</label>
+    <input id="languageId" type="text" name="language"  placeholder="Qual sua linguagem de proramação preferida?" />
+    <br />
+  </div>
+  <button onclick="sendData()">Enviar</button>
+
+<script>
+
+function sendData(){
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200){
+      var responseObj = JSON.parse(this.responseText);
+      if(responseObj.success == false){
+        alert("Ocorreu um problema ao efetuar o cadastro, entre em contato com o suporte");
+      } else{
+        alert("Obrigado pelo cadastro!");
+      }
+    }
+  };
+
+  var name = document.getElementById("nameId").value;
+  var email = document.getElementById("emailId").value;
+  var language = document.getElementById("languageId").value;
+  if(name && email && language){
+    var data = {
+        name: name,
+        email: email,
+        language: language
+    };
+
+    xhttp.open("POST", "http://localhost:8080", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(data));
+  } else {
+    alert("Dados de entrada inválidos, favor checar todos os campos");
+  } 
+}
+
+</script>
+
+</body>
+</html>

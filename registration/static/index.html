@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Minutrade</title>
+</head>
+  <body>
+ <div>
+    <p>Complete the fields and click on the button to subscribe a new user</p>
+    <label for="name">Name:</label>
+    <input id="nameId" type="text" name="name"  placeholder="Enter your full name" />
+    <br />
+    <label for="email">Email:</label>
+    <input id="emailId" type="text" name="email" placeholder="Enter your email address" />
+    <br />
+    <label for="cpf">CPF:</label>
+    <input id="cpfId" type="text" name="cpf" placeholder="(Ex: 999.999.999-99))"/>
+    <br /> 
+    <label for="address">Address:</label>
+    <input id="addressId" type="text"  name="address" placeholder="Enter your address"/>
+    <br /> 
+    <div id="mainPhone">
+      <label for="phone">Phone number:</label>
+      <input id="phoneId" type="text" name="phone" placeholder="Enter your phone number"/>
+    </div>
+    <div id="extraPhones">
+    </div>
+    <label for="status">Marital status:</label>
+    <input id="statusId" type="text" name="status" placeholder="Enter your marital status" />
+    <br />
+  </div>
+  <button onclick="addNewPhone()">Add new phone number</button>
+  <button onclick="deletePhone()">Delete phone number</button>
+  <button onclick="sendData()">Subscribe/Update</button> 
+
+  <div>
+    <p>Search user by CPF and update data</p>
+    <label for="searchCPF">CPF:</label>
+    <input id="searchCPFId" type="text" name="searchCPF" placeholder="(Ex: 999.999.999-99)" />
+    <button onclick="searchCPF()">Search</button>
+  </div>
+ 
+
+
+
+<script>
+
+function searchCPF(){
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200){
+      var responseObj = JSON.parse(this.responseText);
+      if(responseObj.success == "false"){
+        alert("cpf not found or invalid");
+      } else{
+        var obj = responseObj[0];
+        document.getElementById("nameId").value = obj.name;
+        document.getElementById("emailId").value = obj.email;
+        document.getElementById("cpfId").value = obj.cpf;
+        document.getElementById("addressId").value = obj.address;
+        document.getElementById("phoneId").value = obj.phoneNumber;
+        document.getElementById("statusId").value = obj.maritalStatus;
+      }
+    }
+  };
+
+  
+  var searchCPF = document.getElementById("searchCPFId").value;
+  if(searchCPF){
+   
+    var data = {searchCPF: searchCPF};
+    xhttp.open("POST", "http://localhost:8080/search/", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(data));
+
+  } else {
+    alert("You must enter a valid CPF");
+  } 
+
+}
+
+function sendData(){
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200){
+      var responseObj = JSON.parse(this.responseText);
+      if(responseObj.success == "false"){
+        alert("invalid entry data, please check all fields");
+      } else{
+        console.log(responseObj);
+        alert("Thanks for sharing/updating your data "+responseObj.name+"!");
+      }
+    }
+  };
+
+  
+  var name = document.getElementById("nameId").value;
+  var email = document.getElementById("emailId").value;
+  var cpf =  document.getElementById("cpfId").value;
+  var address =  document.getElementById("addressId").value;
+  var mainPhone = document.getElementById("phoneId").value;
+  var maritalStatus = document.getElementById("statusId").value;   
+  if(name && email && cpf && address && mainPhone && maritalStatus){
+   
+    var div = document.getElementById("extraPhones");
+    var n = div.getElementsByTagName("INPUT").length;  
+
+    var extraPhones = []; 
+    for (i = 0; i < 4; i++) {
+      if( i < n){
+        extraPhones[i] = document.getElementById("phoneId"+i).value;
+      } else{
+        extraPhones[i] = '';
+      }
+    }
+
+    var data = {
+    name: name,
+    email: email,
+    cpf: cpf,
+    address: address,
+    mainPhone: mainPhone,
+    extraPhones: extraPhones,
+    maritalStatus: maritalStatus
+    };
+ 
+    xhttp.open("POST", "http://localhost:8080", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(data));
+
+  } else {
+    alert("missing data, please check all fields");
+  } 
+
+}
+
+
+function deletePhone(){
+
+  var phones = document.getElementById("extraPhones");
+  phones.removeChild(phones.lastChild); 
+
+}
+
+
+function addNewPhone(){
+
+  var itm = document.getElementById("mainPhone");
+  var cln = itm.cloneNode(true);
+  cln.removeChild(cln.lastChild);
+
+  var div = document.getElementById("extraPhones");
+
+  var n = div.getElementsByTagName("INPUT").length;  
+
+  if(n < 4){
+    cln.id = "extraPhone"+n;
+    cln.lastElementChild.id = "phoneId"+n;
+    document.getElementById("extraPhones").appendChild(cln);
+  } else {
+    alert("The maximun number of phones is 5");
+  }
+}
+    
+  </script>
+
+  </body>
+</html>

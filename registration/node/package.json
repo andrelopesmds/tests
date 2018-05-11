@@ -1,0 +1,31 @@
+{
+  "name": "registration",
+  "version": "1.0.0",
+  "description": "Clients registration features",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrelms1/registration.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrelms1/registration/issues"
+  },
+  "homepage": "https://github.com/andrelms1/registration#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "cpf": "^1.0.0",
+    "express": "^4.16.3",
+    "isemail": "^3.1.1",
+    "mocha": "^5.0.4",
+    "serve-static": "^1.13.2",
+    "sqlite3": "^4.0.0"
+  },
+  "devDependencies": {}
+}
